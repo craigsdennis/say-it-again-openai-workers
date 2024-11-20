@@ -1,6 +1,6 @@
 # Say It Again
 
-This is an authenticated example based on the OpenAI Realtime Relay on Workers starter template.
+This is an authenticated example based on the [Cloudflare OpenAI Realtime Relay on Workers starter template](https://github.com/cloudflare/openai-workers-relay).
 
 This makes use of the [OpenAI Realtime API](https://platform.openai.com/docs/api-reference/realtime) to "parrot" back what you said but in character.
 
