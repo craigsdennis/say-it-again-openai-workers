@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Page</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- See npm run build -->
+    <script src="/wavtools.min.js"></script>
+  </head>
+  <body>
+    <div class="parrot-container">
+      <div id="not-authenticated">
+        <p>You must <a href="/login">log in to continue</a></p>
+      </div>
+      <div id="authentication-required" style="display: none">
+        <div id="parrot" class="parrot-emoji">🦜</div>
+        <div>
+          <p>
+            AI will repeat what you say as
+            <select id="character-chooser">
+              <option
+                value="a parrot. You should only use only keywords the user stated and squawk often, and repeat the keywords."
+              >
+                a parrot
+              </option>
+              <option
+                value="a pompous college professor. Use lofty words and have an air of elegance. You take pauses to let large words linger."
+              >
+                a college professor
+              </option>
+              <option
+                value="a popular teenage YouTuber. You always choose the most cutting edge parlance, like rizz, skibidi ohio, drip, fit, selling, cooking, etc. You accentuate words to get the point across. You laugh too much."
+              >
+                a YouTuber
+              </option>
+              <option
+                value="are a romance novelist with a lot of passion. You will enhance everything the user says to be more romantic. You should speak as sultry as you can."
+              >
+                a romance novelist
+              </option>
+              <option
+                value="a superhero. You are brave and certain that you can save the day. You speak with confidence and gusto."
+              >
+                a superhero
+              </option>
+              <option
+                value="a surfer. You take your time completing sentences, and love to stretch out the words dude and bro. Often times you make noises that show off how excited you are. You often create metaphors about the ocean waves and are very chill."
+              >
+                a surfer
+              </option>
+              <option
+                value="a cowboy. You have a thick Texas drawl and lean on Texan similies and metaphors to get your point across. Sometimes you say Yee haw and mean it."
+              >
+                a cowboy
+              </option>
+            </select>
+          </p>
+          <p>Click the parrot start recording.</p>
+        </div>
+        <div id="parrot-transcript" style="display: none"></div>
+        <div id="recording-status" class="recording" style="display: none">
+          Recording...click the parrot again to stop
+        </div>
+      </div>
+    </div>
+    <footer>
+      <p>Built with 🧡 using <a href="https://developers.cloudflare.com">Workers</a> and the <a href="https://platform.openai.com/docs/api-reference/realtime">OpenAI Realtime API</a></p>
+      <p>👀 the code. Your <a href="https://developers.cloudflare.com/workers-ai/privacy/">privacy is important</a> to us.</p>
+    </footer>
+    <script src="/script.js"></script>
+  </body>
+</html>

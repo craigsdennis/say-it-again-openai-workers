@@ -1,11 +1,15 @@
 // Copyright (c) 2024 Cloudflare, Inc.
 // Licensed under the MIT license found in the LICENSE file or at https://opensource.org/licenses/MIT
 
+import { Hono } from "hono";
+import { jwt, JwtVariables, sign } from "hono/jwt";
 import { RealtimeClient } from "@openai/realtime-api-beta";
+import { HTTPException } from "hono/http-exception";
+import { setCookie } from "hono/cookie";
 
-type Env = {
-  OPENAI_API_KEY: string;
-};
+type Variables = JwtVariables;
+
+const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 const DEBUG = false; // set as true to see debug logs
 const MODEL = "gpt-4o-realtime-preview-2024-10-01";
@@ -143,20 +147,61 @@ async function createRealtimeClient(
   });
 }
 
-export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext
-  ): Promise<Response> {
-    // This would be a good place to add logic for
-    // authentication, rate limiting, etc.
-    // You could also do matching on the path or other things here.
-    const upgradeHeader = request.headers.get("Upgrade");
-    if (upgradeHeader === "websocket") {
-      return createRealtimeClient(request, env, ctx);
-    }
+app.use("/auth/*", (c, next) => {
+  const jwtMiddleware = jwt({
+    secret: c.env.JWT_SECRET,
+    cookie: "jwtPayload",
+  });
+  return jwtMiddleware(c, next);
+});
 
-    return new Response("Expected Upgrade: websocket", { status: 426 });
-  },
-};
+app.onError(async (err, c) => {
+  console.error(err);
+  if (err instanceof HTTPException) {
+    const res = err.getResponse();
+    if (res.status === 401) {
+      return c.redirect(`/login`);
+    }
+  }
+  return new Response(err.message);
+});
+
+app.post("/authenticate", async (c) => {
+  const body = await c.req.parseBody();
+  // TODO: Use D1 to store users and passwords
+  if (body.username === "cloud" && body.password === "flare") {
+    const expires = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30; // 30 days
+    const expiresDate = new Date();
+    expiresDate.setTime(expiresDate.getTime() + expires);
+    const payload = {
+      sub: body.username,
+      role: "user",
+      exp: expires,
+    };
+    const jwt = await sign(payload, c.env.JWT_SECRET);
+    setCookie(c, "jwtPayload", jwt, { expires: expiresDate });
+    return c.redirect("/");
+  }
+  const message = "Invalid login, try again";
+  // TODO: Show the message if it exists
+  return c.redirect(`/login?message=${encodeURIComponent(message)}`);
+});
+
+app.get("/auth/check", async (c) => {
+  console.log("This will be blocked unless user is authenticated");
+  const jwt = c.get("jwtPayload");
+  return c.json({ success: true, loggedInAs: jwt.sub });
+});
+
+app.get("/auth/ws", async (c) => {
+  // This would be a good place to add logic for rate limiting, etc.
+  const jwt = c.get("jwtPayload");
+  console.log("jwt", jwt);
+  const upgradeHeader = c.req.header("Upgrade");
+  if (upgradeHeader === "websocket") {
+    return createRealtimeClient(c.req.raw, c.env, c.executionCtx);
+  }
+  return new Response("Expected Upgrade: websocket", { status: 426 });
+});
+
+export default app;

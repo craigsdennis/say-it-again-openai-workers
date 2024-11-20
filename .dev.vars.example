@@ -1,0 +1,2 @@
+OPENAI_API_KEY="sk-proj-go-get-your-own"
+JWT_SECRET="do-not-tell-anybody-what-your-secret-is-its-yours-and-can-be-used-to-sign-jwts"

@@ -133,3 +133,7 @@ dist
 .wrangler 
 .dev.vars 
 .DS_Store
+
+# Copied from node modules
+public/wavtools.min.js
+public/wavtools.js
