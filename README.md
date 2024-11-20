@@ -29,7 +29,7 @@ npx wrangler secret put OPENAI_API_KEY
 ```
 
 ```bash
-npx wrangler secret put JWT_
+npx wrangler secret put JWT_SECRET
 ```
 
 ```bash
