@@ -1,6 +1,6 @@
 name = "say-it-again"
 main = "src/index.ts"
-compatibility_date = "2024-10-10"
+compatibility_date = "2024-11-11"
 
 # This will deploy the project by default to openai-workers-relay.<username>.workers.dev. 
 # You can modify this by changing the name of the project in wrangler.toml, 
