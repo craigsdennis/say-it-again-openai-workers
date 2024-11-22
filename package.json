@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run dev",
-    "build": "cp ./node_modules/wavtools/script/wavtools.js ./public/",
+    "build": "cp ./node_modules/wavtools/script/wavtools.min.js ./public/",
     "dev": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy"
   },
