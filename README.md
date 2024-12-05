@@ -1,5 +1,9 @@
 # Say It Again
 
+[<img src="https://img.youtube.com/vi/D5mIer4qmdE/0.jpg">](https://youtu.be/D5mIer4qmdE "Authenticate your OpenAI Realtime API
+")
+
+
 This is an authenticated example based on the [Cloudflare OpenAI Realtime Relay on Workers starter template](https://github.com/cloudflare/openai-workers-relay).
 
 This makes use of the [OpenAI Realtime API](https://platform.openai.com/docs/api-reference/realtime) to "parrot" back what you said but in character.
